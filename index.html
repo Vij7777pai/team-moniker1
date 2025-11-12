@@ -307,6 +307,25 @@
             margin: 30px 0;
             line-height: 1.2;
             word-wrap: break-word;
+            cursor: text;
+            padding: 10px 20px;
+            border-radius: 15px;
+            transition: all 0.3s;
+            outline: none;
+        }
+        
+        .moniker-display:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .moniker-display:focus {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.3);
+        }
+        
+        .moniker-display:empty:before {
+            content: attr(placeholder);
+            opacity: 0.5;
         }
         
         .celebration-btn {
@@ -418,7 +437,9 @@
         <!-- Reveal Section -->
         <div class="reveal-section">
             <div class="reveal-title">✨ Introducing... ✨</div>
-            <div class="moniker-display" id="monikerDisplay">The [Your Team Name]</div>
+            <div class="moniker-display" id="monikerDisplay" contenteditable="true" 
+                 spellcheck="false"
+                 placeholder="Click to edit team name...">The [Your Team Name]</div>
             <button class="celebration-btn" onclick="celebrate()">🎉 CELEBRATE & SCREENSHOT!</button>
         </div>
     </div>
@@ -490,7 +511,8 @@
             selectedMoniker = idea;
             
             // Update display
-            document.getElementById('monikerDisplay').textContent = `The ${idea}`;
+            const displayElement = document.getElementById('monikerDisplay');
+            displayElement.textContent = `The ${idea}`;
         }
         
         // Add idea on Enter key
@@ -502,10 +524,14 @@
         
         // Celebration
         function celebrate() {
+            const displayElement = document.getElementById('monikerDisplay');
+            const monikerText = displayElement.textContent.trim();
             const justification = document.getElementById('justification').value;
             
-            if (!selectedMoniker) {
-                alert('🎯 Select a moniker from your brainstorm first!');
+            // Get selected moniker or use manually typed one
+            if (!monikerText || monikerText === 'The [Your Team Name]') {
+                alert('🎯 Please select or type your team moniker first!');
+                displayElement.focus();
                 return;
             }
             
@@ -514,6 +540,9 @@
                 return;
             }
             
+            // Extract just the team name without "The"
+            const teamName = monikerText.replace(/^The\s+/i, '');
+            
             // Confetti effect
             for (let i = 0; i < 100; i++) {
                 createConfetti();
@@ -521,7 +550,7 @@
             
             // Success message
             setTimeout(() => {
-                alert(`🎉 AMAZING! You're officially "The ${selectedMoniker}"!\n\n📸 Take a screenshot now to capture this moment!`);
+                alert(`🎉 AMAZING! You're officially "${teamName}"!\n\n📸 Take a screenshot now to capture this moment!`);
             }, 500);
         }
         
