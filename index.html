@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Moniker Sprint</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            font-weight: 900;
+        }
+        
+        .header .emoji {
+            font-size: 1.2em;
+        }
+        
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        
+        .timer-badge {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .section {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .question {
+            background: linear-gradient(135deg, #f7f8ff 0%, #f0f2ff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        .brainstorm-area {
+            background: #fafbff;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .brainstorm-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .idea-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .add-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .add-btn:active {
+            transform: translateY(0);
+        }
+        
+        .ideas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 60px;
+        }
+        
+        .idea-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: popIn 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .idea-bubble:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .idea-bubble.selected {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: scale(1.1);
+        }
+        
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .remove-icon {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        
+        .hint-text {
+            color: #999;
+            font-style: italic;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        
+        .why-section {
+            background: linear-gradient(135deg, #fff5f7 0%, #fff0f5 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 3px solid #f093fb;
+        }
+        
+        .why-title {
+            font-size: 1.4em;
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .why-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 20px;
+            border: 3px solid #f093fb;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            background: white;
+        }
+        
+        .why-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(245, 87, 108, 0.1);
+        }
+        
+        .reveal-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+        }
+        
+        .reveal-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        
+        .moniker-display {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+            margin: 30px 0;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+        
+        .celebration-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .celebration-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .moniker-display {
+                font-size: 2.5em;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="emoji">🚀</span> Team Moniker Sprint <span class="emoji">⚡</span></h1>
+            <p>Let's discover who you REALLY are!</p>
+            <div class="timer-badge">⏱️ 15 minutes</div>
+        </div>
+        
+        <!-- Discovery Section -->
+        <div class="section">
+            <div class="section-title">
+                <span>💡</span> Quick Discovery
+            </div>
+            
+            <div class="question">
+                <div class="question-text">1️⃣ In ONE word, what problem disappears when your team shows up?</div>
+                <input type="text" class="input-field" id="problem" placeholder="e.g., Chaos, Confusion, Delays...">
+            </div>
+            
+            <div class="question">
+                <div class="question-text">2️⃣ What's your team's superpower? What can ONLY you do?</div>
+                <input type="text" class="input-field" id="superpower" placeholder="e.g., We connect people, We bring clarity...">
+            </div>
+            
+            <div class="question">
+                <div class="question-text">3️⃣ Complete this: "We're the team that ____________"</div>
+                <input type="text" class="input-field" id="complete" placeholder="e.g., makes things happen, builds bridges...">
+            </div>
+        </div>
+        
+        <!-- Brainstorm Section -->
+        <div class="section">
+            <div class="section-title">
+                <span>🎨</span> Brainstorm Your Moniker
+            </div>
+            
+            <div class="brainstorm-area">
+                <div class="brainstorm-input">
+                    <input type="text" class="idea-input" id="ideaInput" placeholder="Type a moniker idea and hit Add...">
+                    <button class="add-btn" onclick="addIdea()">➕ Add</button>
+                </div>
+                
+                <div class="ideas-container" id="ideasContainer">
+                    <div class="empty-state">Your moniker ideas will appear here! Start brainstorming... 🤔</div>
+                </div>
+            </div>
+            
+            <div class="hint-text">
+                💡 Tip: Click on an idea to select it as your winner! Click the ✕ to remove ideas.
+            </div>
+        </div>
+        
+        <!-- Justify Section -->
+        <div class="section">
+            <div class="section-title">
+                <span>🎤</span> Why This Moniker?
+            </div>
+            
+            <div class="why-section">
+                <div class="why-title">Tell us the story behind your choice! 🌟</div>
+                <textarea class="why-input" id="justification" placeholder="Why did you choose this moniker? What does it mean to your team? What makes it perfect? Be creative, be funny, be YOU!"></textarea>
+            </div>
+        </div>
+        
+        <!-- Reveal Section -->
+        <div class="reveal-section">
+            <div class="reveal-title">✨ Introducing... ✨</div>
+            <div class="moniker-display" id="monikerDisplay">The [Your Team Name]</div>
+            <button class="celebration-btn" onclick="celebrate()">🎉 CELEBRATE & SCREENSHOT!</button>
+        </div>
+    </div>
+    
+    <script>
+        let selectedMoniker = null;
+        
+        // Add idea to brainstorm area
+        function addIdea() {
+            const input = document.getElementById('ideaInput');
+            const ideasContainer = document.getElementById('ideasContainer');
+            const idea = input.value.trim();
+            
+            if (idea) {
+                // Remove empty state if it exists
+                const emptyState = ideasContainer.querySelector('.empty-state');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+                
+                // Create idea bubble
+                const bubble = document.createElement('div');
+                bubble.className = 'idea-bubble';
+                bubble.innerHTML = `
+                    <span>${idea}</span>
+                    <span class="remove-icon" onclick="removeIdea(this)">✕</span>
+                `;
+                
+                // Click to select
+                bubble.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('remove-icon')) {
+                        selectMoniker(this, idea);
+                    }
+                });
+                
+                ideasContainer.appendChild(bubble);
+                input.value = '';
+                input.focus();
+            }
+        }
+        
+        // Remove idea
+        function removeIdea(element) {
+            const bubble = element.parentElement;
+            const ideasContainer = document.getElementById('ideasContainer');
+            
+            bubble.style.animation = 'popIn 0.3s ease reverse';
+            setTimeout(() => {
+                bubble.remove();
+                
+                // Add empty state back if no ideas left
+                if (ideasContainer.children.length === 0) {
+                    ideasContainer.innerHTML = '<div class="empty-state">Your moniker ideas will appear here! Start brainstorming... 🤔</div>';
+                    document.getElementById('monikerDisplay').textContent = 'The [Your Team Name]';
+                    selectedMoniker = null;
+                }
+            }, 300);
+        }
+        
+        // Select moniker
+        function selectMoniker(bubble, idea) {
+            // Remove previous selection
+            document.querySelectorAll('.idea-bubble').forEach(b => {
+                b.classList.remove('selected');
+            });
+            
+            // Select this one
+            bubble.classList.add('selected');
+            selectedMoniker = idea;
+            
+            // Update display
+            document.getElementById('monikerDisplay').textContent = `The ${idea}`;
+        }
+        
+        // Add idea on Enter key
+        document.getElementById('ideaInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addIdea();
+            }
+        });
+        
+        // Celebration
+        function celebrate() {
+            const justification = document.getElementById('justification').value;
+            
+            if (!selectedMoniker) {
+                alert('🎯 Select a moniker from your brainstorm first!');
+                return;
+            }
+            
+            if (!justification.trim()) {
+                alert('🎤 Tell us WHY you chose this moniker! The story matters!');
+                return;
+            }
+            
+            // Confetti effect
+            for (let i = 0; i < 100; i++) {
+                createConfetti();
+            }
+            
+            // Success message
+            setTimeout(() => {
+                alert(`🎉 AMAZING! You're officially "The ${selectedMoniker}"!\n\n📸 Take a screenshot now to capture this moment!`);
+            }, 500);
+        }
+        
+        // Create confetti
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#ffd700', '#00ff88'];
+            
+            confetti.style.position = 'fixed';
+            confetti.style.width = '12px';
+            confetti.style.height = '12px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-20px';
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.opacity = '1';
+            confetti.style.pointerEvents = 'none';
+            confetti.style.zIndex = '99999';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(confetti);
+            
+            let pos = -20;
+            let rotation = Math.random() * 360;
+            const drift = (Math.random() - 0.5) * 100;
+            
+            const fall = setInterval(() => {
+                if (pos > window.innerHeight + 20) {
+                    clearInterval(fall);
+                    confetti.remove();
+                } else {
+                    pos += 3;
+                    rotation += 5;
+                    confetti.style.top = pos + 'px';
+                    confetti.style.left = `calc(${confetti.style.left} + ${drift * (pos / window.innerHeight)}px)`;
+                    confetti.style.transform = `rotate(${rotation}deg)`;
+                    confetti.style.opacity = 1 - (pos / window.innerHeight);
+                }
+            }, 20);
+        }
+    </script>
+</body>
+</html>
